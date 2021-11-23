@@ -1,0 +1,32 @@
+{
+    "name": "fjakkarin/nets-sample",
+    "description": "This is a simple project to setup Nets Easy payment.",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Fjakkarin\\NetsSample\\": "public/"
+        },
+        "classmap": [
+            "public/inc"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Jóhan H Dam-Davidsen",
+            "email": "johan.davidsen@fjakkarin.com"
+        }
+    ],
+    "scripts": {
+        "dev": "php -S localhost:8000 -t public/"
+    },
+    "require-dev": {
+        "codeception/codeception": "^4.1",
+        "codeception/module-phpbrowser": "^1.0.0",
+        "codeception/module-asserts": "^1.0.0",
+        "codeception/module-webdriver": "^1.4"
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.4"
+    }
+}
