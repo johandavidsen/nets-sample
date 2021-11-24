@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Checkout</title>
-</head>
-<body>
+{% extends ./../views/layout.html %}
+
+{% block title %}_NETS Easy - Sample by Fjakkarin.com{% endblock %}
+
+{% block content %}
     <h1>Checkout</h1>
     <div id="checkout-container-div">
         <!-- checkout iframe will be embedded here -->
@@ -33,5 +32,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

@@ -27,6 +27,7 @@
         "codeception/module-webdriver": "^1.4"
     },
     "require": {
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+      "ext-curl": "*"
     }
 }
