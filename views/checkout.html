@@ -1,12 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head><title>Checkout</title></head>
+<head>
+	<title>Checkout</title>
+</head>
 <body>
-<h1>Checkout</h1>
-<div id="checkout-container-div">
-	<!-- checkout iframe will be embedded here -->
-</div>
-<script src="https://test.checkout.dibspayment.eu/v1/checkout.js?v=1"></script>
-<script src="/js/script.js"></script>
+    <h1>Checkout</h1>
+    <div id="checkout-container-div">
+        <!-- checkout iframe will be embedded here -->
+    </div>
+    <script src="https://test.checkout.dibspayment.eu/v1/checkout.js?v=1"></script>
+    <script type="application/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentId = urlParams.get('paymentId');
+            if (paymentId) {
+
+                const checkoutOptions = {
+                    checkoutKey: "{{ $checkout_token }}",
+                    paymentId: paymentId,
+                    containerId: "checkout-container-div"
+                };
+
+                const checkout = new Dibs.Checkout(checkoutOptions);
+
+                checkout.on('payment-completed', function (response) {
+                    window.location = 'completed.php';
+                });
+
+            } else {
+                console.log("Expected a paymentId");   // No paymentId provided,
+                window.location = 'index.php';         // go back to
+            }
+        });
+    </script>
 </body>
 </html>
