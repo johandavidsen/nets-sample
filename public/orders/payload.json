@@ -1,0 +1,39 @@
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "http://localhost:8000/checkout.html",
+    "termsUrl": "http://localhost:8000/terms.html",
+    "merchantHandlesConsumerData": true,
+    "charge": true,
+    "consumer": {
+      "email": "john.doe@doemail.com",
+      "shippingAddress": {
+        "postalCode": "0956"
+      },
+      "phoneNumber": {
+        "prefix": "+46",
+        "number": "0123456789"
+      },
+      "privatePerson": {
+        "firstName": "john",
+        "lastName": "Doe"
+      }
+    }
+  },
+  "order": {
+    "items": [
+      {
+        "reference": "ref42",
+        "name": "Demo product",
+        "quantity": 2,
+        "unit": "hours",
+        "unitPrice": 80000,
+        "grossTotalAmount": 160000,
+        "netTotalAmount": 160000
+      }
+    ],
+    "amount": 160000,
+    "currency": "SEK",
+    "reference": "Demo Order"
+  }
+}
