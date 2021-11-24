@@ -15,7 +15,7 @@ require_once __DIR__ . './../vendor/autoload.php';
 $dotenv = Dotenv::createImmutable(__DIR__ . './../');
 $dotenv->load();
 
-Template::view('../views/checkout.html',
+Template::view('../resources/views/checkout.html',
 	[
 		'checkout_token' => $_ENV['NETS_CHECKOUT_KEY']
 	]

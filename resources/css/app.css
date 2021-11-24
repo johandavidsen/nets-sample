@@ -1,0 +1,41 @@
+@tailwind base;
+
+@tailwind components;
+
+.app {
+   @apply w-1/2 container mx-auto flex flex-col justify-between
+}
+
+.river {
+    @apply pt-32 pl-2 pr-2 sm:pl-2 sm:pr-2 md:pl-32 md:pr-32;
+}
+
+.stone {
+    @apply mt-8 mb-5 flex flex-col shadow-2xl;
+}
+
+.stone .heading {
+    @apply flex flex-row justify-between pl-5 pr-5 pt-5;
+}
+
+.stone .bulk {
+    @apply mt-10 mb-10;
+}
+
+.stone .last {
+    @apply pl-6 pr-6 pt-4 pb-4 bg-black text-white;
+}
+
+.button {
+    @apply inline-flex items-center px-4 py-3 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black;
+}
+
+.h1 {
+    @apply text-4xl;
+}
+
+.a {
+
+}
+
+@tailwind utilities;

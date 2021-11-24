@@ -11,5 +11,5 @@ use Fjakkarin\NetsSample\Inc\Template;
 
 include 'inc/Template.php';
 
-Template::view('../views/completed.html');
+Template::view('../resources/views/completed.html');
 
