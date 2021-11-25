@@ -7,52 +7,57 @@
 
 namespace Fjakkarin\NetsSample;
 
-use Dotenv\Dotenv;
-use Fjakkarin\NetsSample\inc\FormData;
-use JetBrains\PhpStorm\Pure;
-use stdClass;
-
 require_once __DIR__ . './../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+use Rakit\Validation\Validator;
 
 $dotenv = Dotenv::createImmutable( __DIR__ . './../' );
 $dotenv->load();
 
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
-	$data   = validateFormData();
-	$order  = createOrder( $data );
-	$result = postOrder( $order );
+	$validator = new Validator;
 
-	/**
-	 * Redirect to the checkout view.
-	 */
-	header( 'Location: /checkout.php?paymentId=' . json_decode( $result )->paymentId, 301 );
-	die();
-}
+	$validation = $validator->validate( $_POST + $_FILES, [
+		'package'   => 'required',
+		'firstName' => 'required',
+		'lastName'  => 'required',
+		'email'     => 'required|email',
+		'phone-code'=> 'required|digits:3',
+		'phone'     => 'required|digits:6',
+		'postCode'  => 'required|digits:4|in:3900,3905,3910,3911,3912,3913,3915,3919,3920,3921,3922,3923,3924,3930,3932,3940,3950,3951,3952,3953,3955,3961,3962,3964,3970,3971,3980,3984,3985,3992',
+	] );
 
-/**
- * This function returns the FormData object.
- *
- * @return FormData
- */
-function validateFormData(): FormData {
-	$r = new FormData();
-	$r->set_email( validateInputData( $_POST["email"] ) )
-	  ->set_first_name( validateInputData( $_POST["firstName"] ) )
-	  ->set_last_name( validateInputData( $_POST["lastName"] ) )
-	  ->set_phone( validateInputData( $_POST["phone"] ) )
-	  ->set_post_code( validateInputData( $_POST["postCode"] ) );
+	if ( $validation->fails() ) {
+		// handling errors
+		$errors = $validation->errors();
+		echo "<pre>";
+		print_r( $errors->firstOfAll() );
+		echo "</pre>";
+		exit;
+	} else {
 
-	return $r;
+		$order  = createOrder( $validation->getValidData() );
+		$result = postOrder( $order );
+
+		/**
+		 * Redirect to the checkout view.
+		 */
+		header( 'Location: /checkout.php?paymentId=' . json_decode( $result )->paymentId, 301 );
+		die();
+	}
 }
 
 /**
  * This function creates a payload based on the FormData provided.
  *
- * @param FormData $data
+ * @param array $data
  *
  * @return bool|string
  */
-function createOrder( FormData $data ): bool|string {
+function createOrder( array $data ): bool|string {
+	$package = getPackage($data["package"]);
+
 	$payload = [
 		"checkout" => [
 			"integrationType"             => "EmbeddedCheckout",
@@ -61,39 +66,65 @@ function createOrder( FormData $data ): bool|string {
 			"url"                         => "http://localhost:8000/checkout.html",
 			"termsUrl"                    => "http://localhost:8000/terms.html",
 			"consumer"                    => [
-				"email"           => $data->get_email(),
+				"email"           => $data["email"],
 				"shippingAddress" => [
 					"postalCode" => "0956"
 				],
 				"phoneNumber"     => [
-					"prefix" => "+46",
-					"number" => "0123456789"
+					"prefix" => "+" . $data["phone-code"],
+					"number" => $data["phone"]
 				],
 				"privatePerson"   => [
-					"firstName" => "john",
-					"lastName"  => "Doe"
+					"firstName" => $data["firstName"],
+					"lastName"  => $data["lastName"]
 				]
 			]
 		],
 		"order"    => [
 			"items"     => [
 				[
-					"reference"        => "ref42",
-					"name"             => "Demo product",
-					"quantity"         => 2,
+					"reference"        => uniqid("fjakkarin_"),
+					"name"             => $package['name'],
+					"quantity"         => 1,
 					"unit"             => "hours",
-					"unitPrice"        => 80000,
-					"grossTotalAmount" => 160000,
-					"netTotalAmount"   => 160000
+					"unitPrice"        => $package['unitPrice'],
+					"grossTotalAmount" => $package['unitPrice'],
+					"netTotalAmount"   => $package['unitPrice']
 				]
 			],
-			"amount"    => 160000,
-			"currency"  => "SEK",
-			"reference" => "Demo Order"
+			"amount"    => $package['unitPrice'],
+			"currency"  => "EUR",
+			"reference" => $package['name']
 		]
 	];
 
 	return json_encode( $payload );
+}
+
+/**
+ * @param string $package
+ *
+ * @return array
+ */
+function getPackage( string $package ): array {
+	if (strcasecmp($package, 'small') === 0) {
+		return [
+			'name' => "Small Package (100 €)",
+			'unitPrice' => 10000
+		];
+	}
+
+	if (strcasecmp($package, 'medium') === 0) {
+		return [
+			'name' => "Medium Package (200 €)",
+			'unitPrice' => 20000
+		];
+	}
+
+	return [
+		'name' => "Large Package (300 €)",
+		'unitPrice' => 30000
+	];
 }
 
 /**
@@ -113,15 +144,3 @@ function postOrder( $payload ): bool|string {
 	return curl_exec( $ch );
 }
 
-/**
- * @param $data
- *
- * @return string
- */
-function validateInputData( $data ): string {
-	$data = trim( $data );
-	$data = stripslashes( $data );
-	$data = htmlspecialchars( $data );
-
-	return $data;
-}

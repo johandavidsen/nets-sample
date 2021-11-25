@@ -14,10 +14,10 @@
                     <form action="/create-payment.php" method="post">
                         <div class="p-4 flex flex-col w-1/2 mx-auto text-left">
                             <label for="package">Product</label>
-                            <select id="package">
-                                <option>Small Package (100 €)</option>
-                                <option>Medium Package (200 €)</option>
-                                <option>Large Package (300 €)</option>
+                            <select id="package" name="package">
+                                <option value="small">Small Package (100 €)</option>
+                                <option value="medium">Medium Package (200 €)</option>
+                                <option value="large">Large Package (300 €)</option>
                             </select>
                         </div>
 
@@ -38,7 +38,10 @@
 
                         <div class="px-4 flex flex-col w-1/2 mx-auto text-left">
                             <label for="phone">Phone</label>
-                            <input id="phone" name="phone" type="text" />
+                            <div>
+                                <input name="phone-code" type="number">
+                                <input id="phone" name="phone" type="number" />
+                            </div>
                         </div>
 
                         <div class="px-4 flex flex-col w-1/2 mx-auto text-left pb-4">

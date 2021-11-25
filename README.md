@@ -8,3 +8,4 @@
 * [JavaScript SDK](https://developers.nets.eu/nets-easy/en-EU/api/checkout-js-sdk/)
 * [Styling and Accessibility](https://developers.nets.eu/nets-easy/en-EU/docs/styling-and-accessibility/)
 * [API Documentation](https://tech.dibspayment.com/easy/api/paymentapi)
+* [Portal](https://portal.dibspayment.eu/dashboard)

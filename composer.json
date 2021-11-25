@@ -28,6 +28,7 @@
     },
     "require": {
         "vlucas/phpdotenv": "^5.4",
-      "ext-curl": "*"
+      "ext-curl": "*",
+        "rakit/validation": "^1.4"
     }
 }
